@@ -1,10 +1,9 @@
 import HitBox from "../hitBox";
 import type Scene from "../scene";
-import PowerUp from "../powerUp";
 
 class Platform extends HitBox{
   private scene: Scene;
-  private movement: Function
+  private movement = () => {}
   constructor(scene: Scene) {
     super({x: 375, y: 600, width: 150, height: 10})
     this.scene = scene
@@ -16,7 +15,7 @@ class Platform extends HitBox{
       return;
     }
     this.x.value -= 10;
-    this.movement(this)
+    this.movement()
   }
 
   moveRight() {
@@ -25,10 +24,10 @@ class Platform extends HitBox{
       return;
     }
     this.x.value += 10;
-    this.movement(this)
+    this.movement()
   }
 
-  onMove(callback: (platform: Platform) => void) {
+  onMove(callback: any) {
     this.movement = callback;
   }
 

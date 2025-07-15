@@ -24,7 +24,7 @@ class Scene {
     this.height = 750; // Default height
     this.backgroundColor = 'black'; // Default background color
     this.platform = new Platform(this);
-    this.balls = [new Ball({x: this.platform.x.value, y: this.platform.y.value - 10, color: 'yellow'})]
+    this.balls = [new Ball({x: this.platform.x.value, y: this.platform.y.value - 10,width: 10, height: 10, color: 'yellow'})]
     this.blocks = blocks.map(block => new Block(block))
     this.walls = walls.map(wall => new Block({...wall, color: 'gray', life: -1}))
     this.powers = []

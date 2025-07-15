@@ -3,14 +3,18 @@
 import HitBox from "../hitBox";
 import type Scene from "../scene";
 import Platform from "../platform";
+import type {RECTANGLE} from "../rectangle";
 
-class PowerUp extends HitBox {
+interface PowerUpProps extends RECTANGLE {
+  duration: number;
+}
+abstract class PowerUp extends HitBox {
   public duration = -1;
   public speedY = 2;
-  public apply: any
-  public deApply: any
+  public abstract apply(scene: Scene): void;
+  public abstract deApply(scene: Scene): void;
   public scene: Scene;
-  constructor(scene: Scene, p) {
+  protected constructor(scene: Scene, p: PowerUpProps) {
     const defaultProps = {
       width: 10,
       height: 10,
@@ -50,7 +54,7 @@ class PowerUp extends HitBox {
 }
 
 class Expand extends PowerUp {
-  constructor(scene: Scene, p) {
+  constructor(scene: Scene, p: PowerUpProps) {
     super(scene, p)
   }
 

@@ -3,7 +3,7 @@ import {v4 as uuid} from "uuid"
 import HitBox from "../hitBox";
 import Ball from "../ball";
 import Block from "../block";
-import PowerUp, {createPowerUp, Expand, PowerFactory} from "../powerUp";
+import PowerUp, {createPowerUp} from "../powerUp";
 class Game {
   public id: string;
   public scene: Scene;

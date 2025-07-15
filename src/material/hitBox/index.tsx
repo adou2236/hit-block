@@ -1,8 +1,9 @@
 import Rectangle from "../rectangle";
 import type {RECTANGLE} from "../rectangle";
 
+// @ts-ignore
 export enum CollisionDirection {
-  null,
+  'null',
   'top',
   'bottom',
   'left',
