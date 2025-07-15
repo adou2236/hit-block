@@ -19,7 +19,6 @@ class PowerUp extends HitBox {
     super(mergedProps)
     this.scene = scene;
     this.duration = p.duration;
-    console.log("@@@@")
     this.onCollide((colHandlers) => {
       for (let i = 0; i < colHandlers.length; i++){
         switch (true) {
@@ -52,7 +51,6 @@ class PowerUp extends HitBox {
 
 class Expand extends PowerUp {
   constructor(scene: Scene, p) {
-    console.log("@@@@!!!!")
     super(scene, p)
   }
 

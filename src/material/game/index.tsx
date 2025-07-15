@@ -105,7 +105,7 @@ class Game {
   }
   gameOver() {
     if (this.isGameOver) return; // 防止重复触发
-    console.log("结束");
+    console.log("游戏结束");
     this.pause();
     this.isGameOver = true;
   }
