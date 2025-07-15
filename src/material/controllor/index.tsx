@@ -19,6 +19,9 @@ class Controllor {
         case 80:
           this.game.pauseToggle()
           break;
+        case 32:
+          this.game.gameStart()
+          break;
       }
     })
     // turbo 按钮

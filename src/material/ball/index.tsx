@@ -1,14 +1,22 @@
 import Platform from "../platform";
 import Block from "../block";
 import HitBox, {CollisionDirection, CollisionHandler} from "../hitBox";
+import {nextTick} from "vue";
 
 class Ball extends HitBox{
   public speedX: number;
   public speedY: number;
-  constructor({x, y, speed = 1}) {
-    super({x, y, width: 10, height: 10})
+  private isColliding: boolean
+  constructor(p, speed = 1) {
+    const defaultProps = {
+      width: 10,
+      height: 10,
+    };
+    const mergedProps = { ...defaultProps, ...p };
+    super(mergedProps)
     this.speedX = speed;
     this.speedY = speed;
+    this.isColliding = false
     this.onCollide((colHandlers) => {
       for (let i = 0; i < colHandlers.length; i++){
         switch (true) {
@@ -43,12 +51,27 @@ class Ball extends HitBox{
   }
 
   changeDirection(colHandler: CollisionHandler<HitBox>) {
-    if(colHandler.direction === CollisionDirection.top || colHandler.direction === CollisionDirection.bottom){
+    // 如果发生碰撞时两物体已经相交，更改小球坐标位置
+    if(this.isColliding){
+      return
+    }
+    this.isColliding = true
+    if(colHandler.direction === CollisionDirection.top){
       this.speedY *= -1
-    }
-    if(colHandler.direction === CollisionDirection.left || colHandler.direction === CollisionDirection.right){
+      this.y.value = colHandler.instance.bottom + this.height / 2;
+    } else if(colHandler.direction === CollisionDirection.bottom){
+      this.speedY *= -1
+      this.y.value = colHandler.instance.top - this.height / 2;
+    } else if(colHandler.direction === CollisionDirection.left){
       this.speedX *= -1
+      this.x.value = colHandler.instance.right + this.width / 2;
+    } else if(colHandler.direction === CollisionDirection.right) {
+      this.speedX *= -1
+      this.x.value = colHandler.instance.left - this.width / 2;
     }
+    nextTick(() => {
+      this.isColliding = false
+    })
   }
 
 }

@@ -8,7 +8,6 @@ const scene = game.scene;
 const controllor = new Controllor(game)
 controllor.init()
 
-game.gameStart()
 const Case = defineComponent({
   name: 'Case',
   setup() {

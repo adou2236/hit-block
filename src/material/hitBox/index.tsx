@@ -1,26 +1,27 @@
 import Rectangle from "../rectangle";
+import type {RECTANGLE} from "../rectangle";
+
 export enum CollisionDirection {
   null,
   'top',
   'bottom',
   'left',
   'right',
-};
+}
 export type CollisionHandler<T> = {instance: T, direction: CollisionDirection}
-export type MultiCollisionHandler = (other: Array<CollisionHandler<HitBox>>) => void;
+export type MultiCollisionHandler = (other: Array<CollisionHandler<HitBox>>) => void
+
 class HitBox extends Rectangle{
   private static instances: HitBox[] = []; // 存储所有 HitBox 实例
   private onCollideCallback: MultiCollisionHandler | null = null;
-  public domRef: HTMLElement | null = null;
-  constructor(p) {
+  public onRemoved: ((current: HitBox) => void) | undefined;
+  constructor(p: RECTANGLE) {
     super(p)
     HitBox.instances.push(this);
   }
 
 
-  setDomRef(el: HTMLElement | null) {
-    this.domRef = el;
-  }
+
   // 设置碰撞回调
   onCollide(callback: MultiCollisionHandler) {
     this.onCollideCallback = callback;
@@ -28,13 +29,12 @@ class HitBox extends Rectangle{
   // 检测碰撞（Axis-Aligned Bounding Box）
   checkCollision(otherInstance: Rectangle): CollisionDirection {
     // 获取两个实体中心点的水平距离与垂直距离
-    const dx = this.x.value + this.width / 2 - (otherInstance.x.value + otherInstance.width / 2);
-    const dy = this.y.value + this.height / 2 - (otherInstance.y.value + otherInstance.height / 2);
+    const dx = this.x.value - otherInstance.x.value;
+    const dy = this.y.value - otherInstance.y.value;
     const halfWidths = (this.width + otherInstance.width) / 2;
     const halfHeights = (this.height + otherInstance.height) / 2;
 
 
-    // TODO 排挤问题
     let direction = CollisionDirection.null;
     if (Math.abs(dx) < halfWidths && Math.abs(dy) < halfHeights) {
       // 碰撞发生，判断方向
@@ -73,9 +73,9 @@ class HitBox extends Rectangle{
   }
   // 可选：清理不再需要的实例
   destroy() {
-    if (this.domRef && this.domRef.parentNode) {
-      this.domRef.parentNode.removeChild(this.domRef);
-    }
+    // if (this.domRef && this.domRef.parentNode) {
+    //   this.domRef.parentNode.removeChild(this.domRef);
+    // }
 
     // 同时从实例池中移除
     const index = HitBox.instances.indexOf(this);
@@ -85,18 +85,10 @@ class HitBox extends Rectangle{
 
     this.domRef = null;
     this.onCollideCallback = null;
+    if (this.onRemoved) {
+      this.onRemoved(this);
+    }
   }
-  render() {
-    return <div
-      ref={(el) => this.setDomRef(el as HTMLElement)}
-      style={`
-      position: absolute;
-      left: ${this.x.value}px;
-      top: ${this.y.value}px;
-      width: ${this.width}px;
-      height: ${this.height}px;
-      background-color: white;
-    `}></div>
-  }
+
 }
 export default HitBox;
